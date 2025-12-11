@@ -11,16 +11,17 @@ import ru.yandex.practicum.filmorate.exception.ValidationException;
 public class ErrorHandler {
 
     // Этот обработчик будет ловить ошибки валидации от @Valid
-    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidationException(final MethodArgumentNotValidException e) {
+        // Мы ловим системную ошибку Spring и возвращаем её сообщение
         return new ErrorResponse(
                 e.getBindingResult().getFieldError().getDefaultMessage()
         );
     }
 
     // Этот обработчик для нашей ручной валидации даты фильма
-    @ExceptionHandler(ValidationException.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleCustomValidationException(final ValidationException e) {
         return new ErrorResponse(
