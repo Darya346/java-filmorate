@@ -27,7 +27,7 @@ public class FilmController {
 
     @PostMapping
     public Film createFilm(@Valid @RequestBody Film film) {
-        validateReleaseDate(film);
+        validateFilm(film);
         film.setId(nextId++);
         films.put(film.getId(), film);
         log.info("Фильм '{}' с id={} успешно создан.", film.getName(), film.getId());
@@ -39,15 +39,25 @@ public class FilmController {
         if (!films.containsKey(film.getId())) {
             throw new ValidationException("Фильм с id=" + film.getId() + " не найден.");
         }
-        validateReleaseDate(film);
+        validateFilm(film);
         films.put(film.getId(), film);
         log.info("Фильм '{}' с id={} успешно обновлен.", film.getName(), film.getId());
         return film;
     }
 
-    private void validateReleaseDate(Film film) {
+
+    private void validateFilm(Film film) {
+        if (film.getName() == null || film.getName().isBlank()) {
+            throw new ValidationException("Название фильма не может быть пустым.");
+        }
+        if (film.getDescription() != null && film.getDescription().length() > 200) {
+            throw new ValidationException("Описание не должно превышать 200 символов.");
+        }
         if (film.getReleaseDate() == null || film.getReleaseDate().isBefore(EARLIEST_RELEASE_DATE)) {
             throw new ValidationException("Дата релиза не может быть раньше 28 декабря 1895 года.");
+        }
+        if (film.getDuration() <= 0) {
+            throw new ValidationException("Продолжительность фильма должна быть положительной.");
         }
     }
 }
