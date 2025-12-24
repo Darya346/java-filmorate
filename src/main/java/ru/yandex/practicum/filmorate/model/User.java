@@ -7,8 +7,10 @@ import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
@@ -27,4 +29,7 @@ public class User {
 
     @PastOrPresent(message = "Дата рождения не может быть в будущем.")
     LocalDate birthday;
+
+    @JsonIgnore
+    Set<Integer> friends = new HashSet<>();
 }
