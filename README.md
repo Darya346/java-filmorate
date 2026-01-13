@@ -2,7 +2,7 @@
 
 ## Схема БД (ER-диаграмма)
 
-<img width="1877" height="1033" alt="filmorate_database" src="https://github.com/user-attachments/assets/1dbddc79-c035-4f66-bc51-a0c5ef52520f" />
+![ER-диаграмма для Filmorate](filmorate_database.png)
 
 ## Описание таблиц
 
