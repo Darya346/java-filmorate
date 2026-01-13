@@ -1,4 +1,4 @@
-# Проект Filmorate - Схема Базы Данных
+
 
 ## Схема БД (ER-диаграмма)
 
@@ -70,3 +70,4 @@ WHERE
     f1.user_id = 1 AND f2.user_id = 2
     AND f1.is_confirmed = true AND f2.is_confirmed = true;
 ```
+
