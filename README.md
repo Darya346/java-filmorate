@@ -4,7 +4,7 @@
 
 <img width="1877" height="1033" alt="filmorate_database" src="https://github.com/user-attachments/assets/1dbddc79-c035-4f66-bc51-a0c5ef52520f" />
 
-**Описание таблиц**
+## Описание таблиц
 
 Основу данных составляют таблицы `users` и `films`, которые хранят информацию о пользователях и фильмах соответственно.
 
