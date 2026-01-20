@@ -6,10 +6,9 @@ import jakarta.validation.constraints.Size;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.experimental.FieldDefaults;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Data
@@ -28,6 +27,6 @@ public class Film {
     @Positive(message = "Продолжительность фильма должна быть положительной.")
     int duration;
 
-    @JsonIgnore
-    Set<Integer> likes = new HashSet<>();
+    MpaRating mpa;
+    Set<Genre> genres = new LinkedHashSet<>(); // Используем LinkedHashSet для сохранения порядка
 }
