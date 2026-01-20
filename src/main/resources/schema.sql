@@ -43,12 +43,6 @@ CREATE TABLE IF NOT EXISTS film_likes (
     PRIMARY KEY (film_id, user_id)
 );
 
-CREATE TABLE IF NOT EXISTS friendships ( 
-    film_id INT REFERENCES films(id) ON DELETE CASCADE,
-    user_id INT REFERENCES users(id) ON DELETE CASCADE,
-    PRIMARY KEY (film_id, user_id)
-);
-
 CREATE TABLE IF NOT EXISTS friendships (
     user_id INT REFERENCES users(id) ON DELETE CASCADE,
     friend_id INT REFERENCES users(id) ON DELETE CASCADE,

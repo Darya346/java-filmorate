@@ -29,10 +29,14 @@ class FilmDbStorageTest {
 
     @BeforeEach
     void clearDb() {
+        // Очищаем ВСЕ таблицы перед каждым тестом
         jdbcTemplate.update("DELETE FROM film_likes");
         jdbcTemplate.update("DELETE FROM film_genres");
+        jdbcTemplate.update("DELETE FROM friendships");
         jdbcTemplate.update("DELETE FROM films");
+        jdbcTemplate.update("DELETE FROM users");
         jdbcTemplate.execute("ALTER TABLE films ALTER COLUMN id RESTART WITH 1");
+        jdbcTemplate.execute("ALTER TABLE users ALTER COLUMN id RESTART WITH 1");
     }
 
     @Test
@@ -84,22 +88,18 @@ class FilmDbStorageTest {
 
         filmStorage.addLike(film.getId(), user.getId());
 
-        // Проверяем, что лайк добавился (в списке популярных фильм будет)
         List<Film> popular = filmStorage.getPopularFilms(1);
         assertThat(popular).hasSize(1);
         assertThat(popular.get(0).getId()).isEqualTo(film.getId());
 
         filmStorage.removeLike(film.getId(), user.getId());
-
-        // Проверяем, что после удаления лайка фильм не в топе
-        // (Этот тест может быть неточным, если есть другие фильмы с лайками, но в чистой БД сработает)
     }
 
     @Test
     public void testGetPopularFilms() {
-        Film film1 = filmStorage.create(createFilm(1)); // 0 лайков
-        Film film2 = filmStorage.create(createFilm(2)); // 1 лайк
-        Film film3 = filmStorage.create(createFilm(3)); // 2 лайка
+        Film film1 = filmStorage.create(createFilm(1));
+        Film film2 = filmStorage.create(createFilm(2));
+        Film film3 = filmStorage.create(createFilm(3));
         User user1 = userStorage.create(createUser(1));
         User user2 = userStorage.create(createUser(2));
 
@@ -115,14 +115,13 @@ class FilmDbStorageTest {
         assertThat(popularFilms.get(2).getId()).isEqualTo(film1.getId());
     }
 
-    // Вспомогательные методы
     private Film createFilm(int index) {
         Film film = new Film();
         film.setName("Film " + index);
         film.setDescription("Description " + index);
         film.setReleaseDate(LocalDate.of(2000 + index, 1, 1));
         film.setDuration(100 + index);
-        film.setMpa(new MpaRating(1, "G")); // Предполагаем, что MPA с ID=1 есть
+        film.setMpa(new MpaRating(1, "G"));
         return film;
     }
 
