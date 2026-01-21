@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Primary // Делаем эту реализацию основной для интерфейса GenreStorage
+@Primary
 @RequiredArgsConstructor
 public class GenreDbStorage implements GenreStorage {
 
@@ -32,10 +32,10 @@ public class GenreDbStorage implements GenreStorage {
         return genres.stream().findFirst();
     }
 
-    private Genre mapRowToGenre(ResultSet rs, int rowNum) throws SQLException {
+    private Genre mapRowToGenre(ResultSet resultSet, int rowNum) throws SQLException {
         return new Genre(
-                rs.getInt("id"),
-                rs.getString("name")
+                resultSet.getInt("id"),
+                resultSet.getString("name")
         );
     }
 }

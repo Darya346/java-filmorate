@@ -14,6 +14,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private static final String FRIEND_PATH = "/{id}/friends/{friendId}";
 
     @PostMapping
     public User create(@Valid @RequestBody User user) {
@@ -35,12 +36,12 @@ public class UserController {
         return userService.getById(id);
     }
 
-    @PutMapping("/{id}/friends/{friendId}")
+    @PutMapping(FRIEND_PATH)
     public void addFriend(@PathVariable int id, @PathVariable int friendId) {
         userService.addFriend(id, friendId);
     }
 
-    @DeleteMapping("/{id}/friends/{friendId}")
+    @DeleteMapping(FRIEND_PATH)
     public void removeFriend(@PathVariable int id, @PathVariable int friendId) {
         userService.removeFriend(id, friendId);
     }

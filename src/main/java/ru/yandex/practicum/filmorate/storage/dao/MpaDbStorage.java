@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Primary // Делаем эту реализацию основной для интерфейса MpaStorage
+@Primary
 @RequiredArgsConstructor
 public class MpaDbStorage implements MpaStorage {
 
@@ -32,10 +32,10 @@ public class MpaDbStorage implements MpaStorage {
         return ratings.stream().findFirst();
     }
 
-    private MpaRating mapRowToMpaRating(ResultSet rs, int rowNum) throws SQLException {
+    private MpaRating mapRowToMpaRating(ResultSet resultSet, int rowNum) throws SQLException {
         return new MpaRating(
-                rs.getInt("id"),
-                rs.getString("name")
+                resultSet.getInt("id"),
+                resultSet.getString("name")
         );
     }
 }

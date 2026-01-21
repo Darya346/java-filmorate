@@ -75,7 +75,6 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public void addFriend(int userId, int friendId) {
-        // Добавляем запись о дружбе. Статус true означает, что заявка подтверждена (для односторонней дружбы)
         String sql = "INSERT INTO friendships (user_id, friend_id, status) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, userId, friendId, true);
     }
@@ -88,33 +87,27 @@ public class UserDbStorage implements UserStorage {
 
     @Override
     public List<User> getFriends(int userId) {
-        // Выбираем пользователей, которые являются друзьями для userId
-        String sql = "SELECT u.* FROM users u " +
-                "JOIN friendships f ON u.id = f.friend_id " +
-                "WHERE f.user_id = ?";
+        String sql = "SELECT u.* FROM users u JOIN friendships f ON u.id = f.friend_id WHERE f.user_id = ?";
         return jdbcTemplate.query(sql, this::mapRowToUser, userId);
     }
 
     @Override
     public List<User> getCommonFriends(int userId, int otherId) {
-        // Находим пересечение списков друзей с помощью INTERSECT
         String sql = "SELECT u.* " +
-                "FROM users u " +
-                "WHERE u.id IN (" +
-                "  SELECT friend_id FROM friendships WHERE user_id = ? " +
-                "  INTERSECT " +
-                "  SELECT friend_id FROM friendships WHERE user_id = ?" +
-                ")";
+                "FROM friendships f1 " +
+                "JOIN friendships f2 ON f1.friend_id = f2.friend_id " +
+                "JOIN users u ON f1.friend_id = u.id " +
+                "WHERE f1.user_id = ? AND f2.user_id = ?";
         return jdbcTemplate.query(sql, this::mapRowToUser, userId, otherId);
     }
 
-    private User mapRowToUser(ResultSet rs, int rowNum) throws SQLException {
+    private User mapRowToUser(ResultSet resultSet, int rowNum) throws SQLException {
         User user = new User();
-        user.setId(rs.getInt("id"));
-        user.setEmail(rs.getString("email"));
-        user.setLogin(rs.getString("login"));
-        user.setName(rs.getString("name"));
-        user.setBirthday(rs.getDate("birthday").toLocalDate());
+        user.setId(resultSet.getInt("id"));
+        user.setEmail(resultSet.getString("email"));
+        user.setLogin(resultSet.getString("login"));
+        user.setName(resultSet.getString("name"));
+        user.setBirthday(resultSet.getDate("birthday").toLocalDate());
         return user;
     }
 }

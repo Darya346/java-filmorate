@@ -30,14 +30,14 @@ public class FilmService {
     }
 
     public Film update(Film film) {
-        getById(film.getId()); // Проверяем, что фильм существует
+        getById(film.getId());
         validateFilm(film);
         return filmStorage.update(film);
     }
 
     public Film getById(int id) {
         return filmStorage.getById(id)
-                .orElseThrow(() -> new NotFoundException("Фильм с id=" + id + " не найден."));
+                .orElseThrow(() -> new NotFoundException(String.format("Фильм с id=%d не найден.", id)));
     }
 
     public List<Film> getAll() {
@@ -47,14 +47,14 @@ public class FilmService {
     public void addLike(int filmId, int userId) {
         getById(filmId);
         userStorage.getById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден."));
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id=%d не найден.", userId)));
         filmStorage.addLike(filmId, userId);
     }
 
     public void removeLike(int filmId, int userId) {
         getById(filmId);
         userStorage.getById(userId)
-                .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден."));
+                .orElseThrow(() -> new NotFoundException(String.format("Пользователь с id=%d не найден.", userId)));
         filmStorage.removeLike(filmId, userId);
     }
 
@@ -68,12 +68,12 @@ public class FilmService {
         }
         if (film.getMpa() != null) {
             mpaStorage.getById(film.getMpa().getId())
-                    .orElseThrow(() -> new NotFoundException("Рейтинг MPA с id=" + film.getMpa().getId() + " не найден."));
+                    .orElseThrow(() -> new NotFoundException(String.format("Рейтинг MPA с id=%d не найден.", film.getMpa().getId())));
         }
         if (film.getGenres() != null) {
             for (Genre genre : film.getGenres()) {
                 genreStorage.getById(genre.getId())
-                        .orElseThrow(() -> new NotFoundException("Жанр с id=" + genre.getId() + " не найден."));
+                        .orElseThrow(() -> new NotFoundException(String.format("Жанр с id=%d не найден.", genre.getId())));
             }
         }
     }
